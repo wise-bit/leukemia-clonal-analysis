@@ -1,0 +1,64 @@
+---
+title: "T-cell Acute Lymphoblastic Leukemia"
+subtitle: "Test Notebook"
+author: "Satrajit Chatterjee"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc_depth: 'null'
+    df_print: paged
+  fig_caption: yes
+  pdf_document:
+    toc_depth: null
+    number_sections: yes
+geometry: margin=1in
+fontsize: 11pt
+urlcolor: blue
+linkcolor: red
+---
+
+\definecolor{tcol}{HTML}{0000FF}
+\definecolor{green}{HTML}{005500}
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Setup
+
+```{r}
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(MuDataSeurat)
+suppressWarnings(library(SeuratData))
+library(hdf5r)
+
+# install.packages("anndata2ri")
+library(anndata2ri)
+```
+
+# Reading the data
+
+```{r}
+pbmc.data <- ReadH5MU('../data/Project_Brand_Perkins_copy.h5mu')
+pbmc.data <- Read10X_h5('../data/test/test_output.h5ad', use.names = TRUE)
+pbmc.data <- ReadH5AD('../data/test/test_output.h5ad')
+# pbmc.data.proteins <- ReadH5AD('../data/test/test_output3.h5ad')
+```
+
+```{r}
+pbmc.data.proteins
+```
+
+```{r}
+
+```
+
+
+# Conclusion
+
+Incomplete. 
+
+---
