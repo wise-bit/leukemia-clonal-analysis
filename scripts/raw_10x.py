@@ -182,7 +182,7 @@ if __name__ == "__main__":
             subsets=["TH1"],
             input_folder_path=input_folder,
             output_folder_path=output_folder,
-            gene_sample_size=1000
+            gene_sample_size=10000
         )
     except Exception as e:
         print(e)

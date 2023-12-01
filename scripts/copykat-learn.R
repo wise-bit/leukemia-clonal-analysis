@@ -1,3 +1,6 @@
+# setwd("C:/Users/satra/Documents/uOttawa/Semester 5.1/CSI 4900")
+# setwd("C:/Users/satra/Documents/uOttawa/Semester 5.1/CSI 4900/repo/honours-project/scripts")
+
 library(devtools)
 install_github("navinlabcode/copykat")
 
@@ -23,12 +26,13 @@ sample_exp.rawdata <- as.matrix(sample_raw.data@assays$RNA@counts)
 # Test with our data
 
 library(rhdf5)
+library(Seurat)
 
-raw <- Read10X(data.dir = "./data/TH1_test/compressed")
+raw <- Read10X(data.dir = "./output_10x")
 raw.data <- CreateSeuratObject(counts = raw, project = "copycat.test", min.cells = 0, min.features = 0)
 exp.rawdata <- as.matrix(raw.data@assays$RNA@counts)
 
-write.table(exp.rawdata, file="./data/TH1_test/exp.rawdata.txt", sep="\t", quote = FALSE, row.names = TRUE)
+write.table(exp.rawdata, file="./data/th1.exp.rawdata.txt", sep="\t", quote = FALSE, row.names = TRUE)
 
 exp.rawdata <- tempfile()
 read.table(exp.rawdata, file="./data/TH1_test/exp.rawdata.txt", sep="\t", header = TRUE, row.names = TRUE)
@@ -69,4 +73,23 @@ copykat.test2 <- copykat(
   distance="euclidean", 
   n.cores=1
 )
+
+###
+
+pred.test <- data.frame(copykat.test$prediction)
+CNA.test <- data.frame(copykat.test$CNAmat)
+
+head(pred.test)
+head(CNA.test[,1:5])
+
+
+
+my_palette <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 3, name = "RdBu")))(n = 999)
+
+chr <- as.numeric(CNA.test$chrom) %% 2+1
+rbPal1 <- colorRampPalette(c('black','grey'))
+CHR <- rbPal1(2)[as.numeric(chr)]
+chr1 <- cbind(CHR,CHR)
+
+
 
