@@ -92,4 +92,8 @@ CHR <- rbPal1(2)[as.numeric(chr)]
 chr1 <- cbind(CHR,CHR)
 
 
+rbPal5 <- colorRampPalette(RColorBrewer::brewer.pal(n = 8, name = "Dark2")[2:1])
+com.preN <- pred.test$copykat.pred
+pred <- rbPal5(2)[as.numeric(factor(com.preN))]
+
 
