@@ -159,6 +159,7 @@ def main(
             Path(f"{input_folder_path}/raw_data/{subset}/filtered_feature_bc_matrix.h5")
         )
         adata_sub.var_names_make_unique()
+        adata_sub.obs.index = [name + subset for name in adata_sub.obs_names]
 
         adata_obs_l.append(adata_sub.obs)
         adata_rna_l.append(adata_sub.mod["rna"].X)
@@ -212,11 +213,11 @@ if __name__ == "__main__":
 
     try:
         main(
-            subsets=["BM4"],
+            subsets=["BM4", "PB2"],
             input_folder_path=input_folder,
             output_folder_path=output_folder,
             # gene_sample_size=10000,
-            cell_sample_size=350
+            cell_sample_size=1000
         )
 
     except Exception as e:
