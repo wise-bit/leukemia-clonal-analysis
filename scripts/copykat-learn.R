@@ -39,7 +39,7 @@ read.table(exp.rawdata, file="./data/TH1_test/exp.rawdata.txt", sep="\t", header
 
 # ---
 
-copykat.test <- copykat(rawmat=exp.rawdata, sam.name="test")
+copykat.test <- copykat(rawmat=exp.rawdata, sam.name="test4")
 
 
 

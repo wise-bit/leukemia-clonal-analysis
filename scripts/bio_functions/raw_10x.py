@@ -1,6 +1,5 @@
 # system imports
 import os
-import time
 # genetic imports
 import muon
 import mudata as md
@@ -122,12 +121,13 @@ def write_matrix(sparse_array: np.ndarray, name: str) -> None:
             file.write(f"{col + 1} {row + 1} {sparse_array[row][col]}\n")
 
 
-def main(
+def raw_10x(
     subsets: List[str],
     output_folder_path: str,
     input_folder_path: str,
     cell_sample_size: Optional[int] = None,
-    gene_sample_size: Optional[int] = None
+    gene_sample_size: Optional[int] = None,
+    balanced_dist: bool = False
 ) -> None:
     """
     Main function
@@ -152,6 +152,8 @@ def main(
     rna_var = None
     prot_var = None
 
+    seed_value = 42  # Seed for reproducibility
+
     for subset in subsets:
         print(f"Importing {subset}...")
 
@@ -160,6 +162,16 @@ def main(
         )
         adata_sub.var_names_make_unique()
         adata_sub.obs.index = [name + subset for name in adata_sub.obs_names]
+
+        # balanced selection
+        if balanced_dist:
+            if cell_sample_size:
+                selected_rows = adata_sub.obs.sample(n=cell_sample_size, random_state=seed_value)
+                adata_sub = adata_sub[selected_rows.index]
+
+            if gene_sample_size:
+                selected_cols = adata_sub.var.sample(n=gene_sample_size, random_state=seed_value)
+                adata_sub = adata_sub[:, selected_cols.index]
 
         adata_obs_l.append(adata_sub.obs)
         adata_rna_l.append(adata_sub.mod["rna"].X)
@@ -178,15 +190,14 @@ def main(
     )
     adata_merged.obs = obs_merged
 
-    if cell_sample_size:
-        seed_value = 42  # Seed for reproducibility
-        selected_rows = adata_merged.obs.sample(n=cell_sample_size, random_state=seed_value)
-        adata_merged = adata_merged[selected_rows.index]
+    if not balanced_dist:  # balanced selection already handled above
+        if cell_sample_size:
+            selected_rows = adata_merged.obs.sample(n=cell_sample_size, random_state=seed_value)
+            adata_merged = adata_merged[selected_rows.index]
 
-    if gene_sample_size:
-        seed_value = 42  # Seed for reproducibility
-        selected_cols = adata_merged.var.sample(n=gene_sample_size, random_state=seed_value)
-        adata_merged = adata_merged[:, selected_cols.index]
+        if gene_sample_size:
+            selected_cols = adata_merged.var.sample(n=gene_sample_size, random_state=seed_value)
+            adata_merged = adata_merged[:, selected_cols.index]
 
     sparse_array = adata_merged.mod["rna"].X.toarray()
     # rows, cols = len(sparse_array), len(sparse_array[0])
@@ -201,27 +212,3 @@ def main(
 
     generate_zip(output_folder_path)
     cleanup_folder(output_folder_path)
-
-
-if __name__ == "__main__":
-    start_time = time.process_time()
-
-    output_folder = "./output_10x"
-    input_folder = "D:/genomics/data/updated"
-
-    initialize_output_folder(output_folder)
-
-    try:
-        main(
-            subsets=["BM4", "PB2"],
-            input_folder_path=input_folder,
-            output_folder_path=output_folder,
-            # gene_sample_size=10000,
-            cell_sample_size=1000
-        )
-
-    except Exception as e:
-        print(e)
-
-    total_time = time.process_time() - start_time
-    print(f"Total CPU time: {total_time:.3f} seconds")
