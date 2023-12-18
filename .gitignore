@@ -52,3 +52,5 @@ rsconnect/
 */big*
 examples
 test*/
+
+__pycache__/

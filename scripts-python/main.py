@@ -5,7 +5,7 @@ if __name__ == "__main__":
     start_time = time.process_time()
 
     output_folder = "./output_10x"
-    input_folder = "D:/genomics/data/updated"
+    input_folder = "E:/genomics/data/updated"
 
     initialize_output_folder(output_folder)
 
@@ -15,7 +15,7 @@ if __name__ == "__main__":
             input_folder_path=input_folder,
             output_folder_path=output_folder,
             # gene_sample_size=10000,
-            cell_sample_size=250,
+            cell_sample_size=500,
             balanced_dist=True
         )
 

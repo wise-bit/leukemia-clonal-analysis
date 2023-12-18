@@ -1,5 +1,5 @@
 # setwd("C:/Users/satra/Documents/uOttawa/Semester 5.1/CSI 4900")
-# setwd("C:/Users/satra/Documents/uOttawa/Semester 5.1/CSI 4900/repo/honours-project/scripts")
+# setwd("C:/Users/satra/Documents/uOttawa/Semester 5.1/CSI 4900/repo/honours-project/scripts-r")
 
 library(devtools)
 install_github("navinlabcode/copykat")
@@ -28,7 +28,7 @@ sample_exp.rawdata <- as.matrix(sample_raw.data@assays$RNA@counts)
 library(rhdf5)
 library(Seurat)
 
-raw <- Read10X(data.dir = "./output_10x")
+raw <- Read10X(data.dir = "../scripts-python/output_10x")
 raw.data <- CreateSeuratObject(counts = raw, project = "copycat.test", min.cells = 0, min.features = 0)
 exp.rawdata <- as.matrix(raw.data@assays$RNA@counts)
 
@@ -39,7 +39,7 @@ read.table(exp.rawdata, file="./data/TH1_test/exp.rawdata.txt", sep="\t", header
 
 # ---
 
-copykat.test <- copykat(rawmat=exp.rawdata, sam.name="test4")
+copykat.test <- copykat(rawmat=exp.rawdata, sam.name="test1.", n.cores=4)
 
 
 
