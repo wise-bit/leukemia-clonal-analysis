@@ -1,4 +1,5 @@
-# CSI 4900 Code Repository
+# Leukemia Clonal Analysis - Honours Project Code Repository
+
 *Fall 2023*
 
 **By Satrajit Chatterjee**
