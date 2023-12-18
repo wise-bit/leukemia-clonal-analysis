@@ -3,7 +3,7 @@ FROM r-base:latest
 
 # Installing required R packages
 RUN R -e "install.packages('Seurat')"
-RUN R -e "install.packages('devtools')
+RUN R -e "install.packages('devtools')"
 RUN R -e "devtools::install_github('miccec/yaGST')"
 RUN R -e "devtools::install_github('AntonioDeFalco/SCEVAN')"
 
