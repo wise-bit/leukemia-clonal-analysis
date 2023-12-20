@@ -1,0 +1,13 @@
+cd projects/rrg-tperkins/Temp/
+
+R> list.files(".")
+R> save.image(file = "copykat_test.RData")
+R> load("copykat_test.RData")
+
+R> save.image(file = "scevan_test.RData")
+
+
+get -r name-of-f
+
+‘/home/schat085/R/x86_64-pc-linux-gnu-library/4.3’
+
