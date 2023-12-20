@@ -54,3 +54,4 @@ examples
 test*/
 
 __pycache__/
+local_*/
