@@ -3,7 +3,7 @@ library(Seurat)
 library(patchwork)
 
 # Peripheral Blood Mononuclear Cells (PBMC)
-pbmc.data <- Read10X(data.dir = "./data/filtered_gene_bc_matrices/hg19/")
+pbmc.data <- Read10X(data.dir = "E:/genomics/data/filtered_gene_bc_matrices/hg19/")
 
 # Initialize the Seurat object with the raw (non-normalized data).
 pbmc <- CreateSeuratObject(

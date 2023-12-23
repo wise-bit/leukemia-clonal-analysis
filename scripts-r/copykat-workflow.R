@@ -1,11 +1,11 @@
-library(devtools)
+# library(devtools)
 
 # install_github("navinlabcode/copykat")
 ## to update copykat
 # remove.packages("copykat")
 # detach("package:copykat")
 
-library(rhdf5)
+# library(rhdf5)
 library(Seurat)
 library(copykat)
 
@@ -17,20 +17,29 @@ raw.data <- CreateSeuratObject(
   min.features = 0
 )
 
-exp.rawdata <- as.matrix(raw.data@assays$RNA@counts)
-# for linux
-# exp.rawdata <- as.matrix(raw.data@assays$RNA$counts)
+control_cells <- colnames(raw.data)[grepl("TH1$|TH2$", colnames(raw.data))]
 
+exp.rawdata <- as.matrix(raw.data@assays$RNA@counts)  # for windows
+# exp.rawdata <- as.matrix(raw.data@assays$RNA$counts)  # for linux
+
+# https://rdrr.io/github/navinlabcode/copykat/man/copykat.html
 # copykat.test <- copykat(rawmat = exp.rawdata, sam.name = "test")
+
 copykat.test <- copykat(
   rawmat = exp.rawdata,
   id.type = "S",
   cell.line = "no",
   ngene.chr = 5,
+  LOW.DR = 0.05,
+  UP.DR = 0.1,
   win.size = 25,
+  norm.cell.names = control_cells,
   KS.cut = 0.15,
   sam.name = "TNBC1",
   distance = "euclidean",
+  output.seg = "TRUE",
+  plot.genes = "TRUE",
+  genome = "hg20",
   n.cores = 4
 )
 
@@ -86,6 +95,8 @@ col_breaks = c(
   seq(0.4, 1, length = 50)
 )
 
+png("heatmap_plot_1.png")
+
 heatmap.3(
   t(CNA.test[, 4:ncol(CNA.test)]),
   dendrogram = "r",
@@ -123,6 +134,8 @@ legend(
   bty = "n"
 )
 
+dev.off()
+
 
 # define subpopulations of aneuploid tumor cells
 
@@ -152,6 +165,7 @@ col_breaks = c(
   seq(0.4, 1, length = 50)
 )
 
+png("heatmap_plot_2.png")
 
 heatmap.3(
   t(tumor.mat),
@@ -191,6 +205,7 @@ legend(
   bty = 'n'
 )
 
+dev.off()
 
 
 ## Check if results are reasonable
@@ -224,7 +239,7 @@ filtered_TNBC1@meta.data$copykat.tumor.pred[rownames(filtered_TNBC1@meta.data) %
 filtered_TNBC1@meta.data$copykat.tumor.pred[rownames(filtered_TNBC1@meta.data) %in% names(hc.umap[hc.umap == 2])] <- "tumor cluster 2"
 
 # plotting the results
-png("cnv_plot_1.png")
+png("cnv_plot_0.png")
 p1 <- DimPlot(filtered_TNBC1, label = T)
 p2 <- DimPlot(filtered_TNBC1, group.by = "copykat.pred")
 p3 <- DimPlot(filtered_TNBC1, group.by = "copykat.tumor.pred")
@@ -234,7 +249,8 @@ dev.off()
 
 ## Feature plot
 png("feature_plot_0.png")
-FeaturePlot(TNBC1, features = c("PTPRC", "EPCAM"), order = T)
+# FeaturePlot(TNBC1, features = c("PTPRC", "EPCAM"), order = T)
+FeaturePlot(TNBC1, features = c("TAL1", "CD4", "CD7", "CD28", "CD34"), order = T)
 dev.off()
 
 
